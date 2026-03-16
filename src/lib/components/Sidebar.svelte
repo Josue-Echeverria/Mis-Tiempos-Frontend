@@ -15,6 +15,7 @@
 
     const navItems = [
         { label: 'Venta', path: '/venta'},
+        { label: 'Listas', path: '/listas'},
         { label: 'Dashboard', path: '/dashboard'},
         { label: 'Administradores', path: '/administradores'},
         { label: 'Sorteos Base', path: '/sorteos-base'},
@@ -23,7 +24,6 @@
         { label: 'Puestos', path: '/puestos'},
         { label: 'Sorteos', path: '/sorteos'},
         { label: 'Vendedores', path: '/vendedores'},
-        { label: 'Listas', path: '/listas'},
         { label: 'Ganadores', path: '/ganadores'},
         { label: 'Reportes', path: '/reportes'},
         { label: 'Cajas', path: '/cajas'},
@@ -59,6 +59,7 @@
 		display: flex;
 		flex-direction: column;
 		border-right: 1px solid #e5e7eb;
+		min-width: 15vw;
 	}
 
 	.sidebar.collapsed {

@@ -24,8 +24,8 @@
         flex-direction: column;
         gap: 2rem;
         flex: 1;
-        font-size: 1.2rem;
     }
+    
     .set-section {
         gap: 1rem;
         width: 100%;

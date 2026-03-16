@@ -18,6 +18,7 @@
 		display: flex;
 		padding: 2rem;
 		width: 100%;
+		font-size: 1.1rem;
 		box-sizing: border-box;
 	}
 </style>

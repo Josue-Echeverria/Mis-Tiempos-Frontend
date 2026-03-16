@@ -66,8 +66,8 @@
 
     .date-section {
         display: flex;
-        flex-direction: column;
         gap: 0.5rem;
+        align-items: center;
     }
 
     .buttons-section {

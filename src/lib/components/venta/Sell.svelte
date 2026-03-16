@@ -1,7 +1,9 @@
 <script lang="ts">
-    let selled = {} as { number: string; price: number };
+    let selled: Record<string, { price: number }> = {};
     let priceInput: HTMLInputElement;
+
     import { sellingMatrix } from '../../stores/UpdateSellMatrix';
+    import { prohibitedNumbers } from '../../stores/UpdateSellMatrix';
 
     function handleNumberKeydown(event: KeyboardEvent) {
         if (event.key === "Enter") {
@@ -11,20 +13,20 @@
     }
 
     function updateSalesData(numbers: string[], price: number) {
-        numbers.forEach(number => {
-            if (selled[number]) {
-                selled[number] += price;
+        const newSelled = { ...selled };
+        numbers.forEach((num) => {
+            if (newSelled[num]) {
+                newSelled[num].price += price;
             } else {
-                selled = { ...selled, [number]: price };
+                newSelled[num] = { price };
             }
-            
-            // Update the matrix
-            console.log(number, price);
-            sellingMatrix.update(matrix => {
-                matrix[number] = (matrix[number] || 0) + price;
-                return matrix;
-            });
         });
+        selled = newSelled;
+    }
+
+    function deleteNumber(number: string) {
+        const { [number]: _, ...rest } = selled;
+        selled = rest;
     }
 
     function onSubmit(event: Event) {
@@ -55,12 +57,22 @@
             }
         });
 
-        updateSalesData(expandedNumbers, parseInt(price));
+        // Filter out prohibited numbers
+        const validNumbers = expandedNumbers.filter(num => !$prohibitedNumbers.includes(parseInt(num)));
 
-        console.log(sellingMatrix);
-        
-        // Clear the form
+        updateSalesData(validNumbers, parseInt(price));
+
         (event.target as HTMLFormElement).reset();
+    }
+
+    function confirmSale() {
+        sellingMatrix.update(matrix => {
+            for (const [number, price] of Object.entries(selled)) {
+                matrix[number] = (matrix[number] || 0) + price.price;
+            }
+            return matrix;
+        });
+        selled = {}; // Clear the local list
     }
 </script>
 
@@ -100,13 +112,16 @@
                 {#each Object.entries(selled) as [number, price]}
                     <tr>
                         <td>{number}</td>
-                        <td>${price}</td>
+                        <td>${price.price}</td>
+                        <td>
+                            <button class="delete-btn" on:click={() => deleteNumber(number)}>X</button>
+                        </td>
                     </tr>
                 {/each}
             </tbody>
         </table>
         <button
-            on:click={() => alert("Venta confirmada!")}
+            on:click={confirmSale}
             disabled={Object.keys(selled).length === 0}
         >
             Confirmar Venta</button
@@ -171,6 +186,15 @@
 
     .selled button {
         width: 100%;
+    }
+
+    .delete-btn {
+        background-color: #dc3545;
+        padding: 0.25rem 0rem;
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333;
     }
 
 </style>

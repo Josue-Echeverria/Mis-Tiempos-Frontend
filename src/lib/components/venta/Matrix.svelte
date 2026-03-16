@@ -40,7 +40,8 @@
                     <input
                         type="number"
                         class="price"
-                        value={$sellingMatrix[colIndex * rows + rowIndex] || 0}
+                        value={$prohibitedNumbers.includes(colIndex * rows + rowIndex) ? 0 : $sellingMatrix[colIndex * rows + rowIndex] || 0}
+                        disabled={$prohibitedNumbers.includes(colIndex * rows + rowIndex)}
                         on:input={(e) => updateCell(colIndex + rowIndex * columns, (e.target as HTMLInputElement).value)}
                     />
                 </div>
@@ -70,6 +71,7 @@
     .prohibited-number input[type="number"] {
         background-color: #f8d7da;
         border-color: #f5c6cb;
+        color: #721c24;
     }
     .prohibited-number input[type="number"]:first-child {
         background-color: #f8c3c7;
@@ -82,12 +84,12 @@
     }
 
     .matrix-cell input[type="number"]{
-        width: 35px;
-        height: 32px;
+        width: 40px;
+        height: 35px;
         padding: 0.5rem;
         text-align: center;
         border: 1px solid #ccc;
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
 
