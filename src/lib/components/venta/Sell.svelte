@@ -1,9 +1,12 @@
 <script lang="ts">
     let selled: Record<string, { price: number }> = {};
     let priceInput: HTMLInputElement;
+    let showQrModal = false;
 
+    import { TrashBinSolid, CubeSolid, QuestionCircleSolid, PrinterSolid, SearchSolid, EyeSolid, ReceiptSolid, CameraPhotoSolid } from "flowbite-svelte-icons";
     import { sellingMatrix } from '../../stores/UpdateSellMatrix';
     import { prohibitedNumbers } from '../../stores/UpdateSellMatrix';
+    import QrModal from './QrModal.svelte';
 
     function handleNumberKeydown(event: KeyboardEvent) {
         if (event.key === "Enter") {
@@ -74,7 +77,51 @@
         });
         selled = {}; // Clear the local list
     }
+
+    // TODO: Implement functionality for these buttons
+    function cleanSell() {
+        if (Object.keys(selled).length === 0) {
+            return;
+        }
+        selled = {};
+    }
+
+    // TODO: Implement functionality for these buttons
+    function generateRandomNumbers() {
+    }
+
+    // TODO: Implement functionality for these buttons
+    function generatePairs() {
+    }
+
+    //TODO: Implement functionality for these buttons
+    function printTicket() {
+    }
+
+    // TODO: Implement functionality for these buttons
+    function searchTicket() {
+    }
+
+    // TODO: Implement functionality for these buttons
+    function viewQR() {
+        if (Object.keys(selled).length === 0) {
+            return;
+        }
+        showQrModal = true;
+    }
+
+    // TODO: Implement functionality for these buttons
+    function scanQR() {
+    }
+
+    // TODO: Implement functionality for these buttons
+    function viewTickets() {
+    }
 </script>
+
+{#if showQrModal}
+    <QrModal data={JSON.stringify(selled)} onClose={() => showQrModal = false} />
+{/if}
 
 <section class="sell">
     <form on:submit={onSubmit}>
@@ -100,6 +147,31 @@
         </div>
         <button type="submit">Agregar</button>
     </form>
+    <!-- TODO: Implement functionality for these buttons -->
+    <div class="buttons-group">
+        <button 
+            on:click={cleanSell}
+            disabled={Object.keys(selled).length === 0}
+        >
+            <TrashBinSolid class="shrink-0 h-4 w-4" />
+            Limpiar
+        </button>
+        <button on:click={generatePairs}>
+            <CubeSolid class="shrink-0 h-4 w-4" />
+            Pares
+        </button>
+        <button on:click={generateRandomNumbers}>
+            <QuestionCircleSolid class="shrink-0 h-4 w-4" />
+            Aleatorio
+        </button>
+        <button 
+            on:click={printTicket}
+            disabled={Object.keys(selled).length === 0}
+        >
+            <PrinterSolid class="shrink-0 h-4 w-4" />
+            Imprimir
+        </button>
+    </div>
     <div class="selled">
         <table>
             <thead>
@@ -120,19 +192,41 @@
                 {/each}
             </tbody>
         </table>
+        <!-- TODO: Implement functionality for these buttons -->
         <button
             on:click={confirmSale}
             disabled={Object.keys(selled).length === 0}
         >
             Confirmar Venta</button
         >
+        <div class="buttons-group">
+            <button on:click={searchTicket}>
+                <SearchSolid class="shrink-0 h-4 w-4" />
+                Buscar Tiquete
+            </button>
+            <button 
+                on:click={viewQR}
+                disabled={Object.keys(selled).length === 0}
+            >
+                <EyeSolid class="shrink-0 h-4 w-4" />
+                Ver QR
+            </button>
+            <button on:click={scanQR}>
+                <CameraPhotoSolid class="shrink-0 h-4 w-4" />
+                Escanear QR
+            </button>
+            <button on:click={viewTickets}>
+                <ReceiptSolid class="shrink-0 h-4 w-4" />
+                Tiquetes
+            </button>
+
+        </div>
     </div>
 </section>
 
 <style>
     .sell {
         flex-direction: column;
-        gap: 1rem;
         width: 40%;
         height: 100%;
     }
@@ -168,7 +262,7 @@
 
     .selled th,
     .selled td {
-        padding: 0.75rem;
+        padding: 0.25rem 0.5rem;
         text-align: left;
         border: 1px solid #ccc;
     }
@@ -195,6 +289,14 @@
 
     .delete-btn:hover {
         background-color: #c82333;
+    }
+
+    .buttons-group {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin: 1rem 0;
+        font-size: medium;
     }
 
 </style>
